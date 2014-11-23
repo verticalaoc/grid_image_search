@@ -24,10 +24,11 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
+        android:onClick="onClickSearch"
         android:text="@string/label_search" />
 
     <GridView
-        android:id="@+id/gridView1"
+        android:id="@+id/gvResults"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/etInput"
