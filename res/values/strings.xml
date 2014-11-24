@@ -9,5 +9,16 @@
     <string name="image_title_label">Default Image Title</string>
     <string name="title_activity_display">DisplayActivity</string>
     <string name="title_activity_full_image">FullImageActivity</string>
+    <string name="setting_label">Setting</string>
+    <string name="title_activity_setting">SettingActivity</string>
+    <string name="image_size_label">Image Size</string>
+    <string name="color_filter_label">Color Filter</string>
+    <string name="image_type">Image Type</string>
+    <string name="site_filter_label">Site Filter</string>
+    <string name="save_label">Save</string>
+    <string name="site_filter_default">yahoo.com</string>
+    <string name="image_type_default">photo</string>
+    <string name="color_filter_default">red</string>
+    <string name="image_size_default">small</string>
 
 </resources>

@@ -8,9 +8,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
-import android.content.ClipData.Item;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,6 +30,7 @@ public class SearchActivity extends Activity {
 	
 	EditText etInput;
 	Button btnSearch;
+	Button btnSetting;
 	GridView gvResults;
 
 	private ArrayList<ImageResult> imageResults;
@@ -37,6 +39,7 @@ public class SearchActivity extends Activity {
 	private void initViews() {
 		etInput = (EditText) findViewById(R.id.etInput);
 		btnSearch = (Button) findViewById(R.id.btnSearch);
+		btnSetting = (Button) findViewById(R.id.btnSetting);
 		gvResults = (GridView) findViewById(R.id.gvResults);
 		gvResults.setOnItemClickListener(new OnItemClickListener() {
 
@@ -65,7 +68,7 @@ public class SearchActivity extends Activity {
 		String keyword = etInput.getText().toString();
 		Toast.makeText(this, URL+keyword, Toast.LENGTH_SHORT).show();
 		AsyncHttpClient client = new AsyncHttpClient();
-		client.get(URL+keyword, new JsonHttpResponseHandler(){
+		client.get(getUrl(keyword), new JsonHttpResponseHandler(){
 			@Override
 			public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
 				JSONArray result = null;
@@ -78,6 +81,42 @@ public class SearchActivity extends Activity {
 				}
 			}
 		});
+	}
+	
+
+	private String getUrl(String keyword) {
+		String url = SearchActivity.URL + keyword;
+		
+		// get more parameter from setting
+		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+		String imageSize = pref.getString("imageSize", ""); 
+		String colorFilter = pref.getString("colorFilter", "");
+		String imaegType = pref.getString("imaegType", "");
+		String siteFilter = pref.getString("siteFilter", "");
+		
+		if (imageSize != "") {
+			url += "&imgsz=" + imageSize;
+		}
+		
+		if (colorFilter != "") {
+			url += "&imgcolor=" + colorFilter;
+		}
+		
+		if (imaegType != "") {
+			url += "&imgtype=" + imaegType;
+		}
+		
+		if (siteFilter != "") {
+			url += "&as_sitesearch=" + siteFilter;
+		}
+		
+		return url;
+	}
+
+	public void onClickSetting(View v) {
+		Toast.makeText(this, "Loading Setting Page...", Toast.LENGTH_SHORT).show();
+		Intent intent = new Intent(SearchActivity.this, SettingActivity.class);
+		startActivity(intent);
 	}
 
 	@Override
