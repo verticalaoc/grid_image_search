@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,12 +36,13 @@ public class SearchActivity extends Activity {
 
 	private ArrayList<ImageResult> imageResults;
 	private ImageResultsAdapter aImageResults;
-	
+		
 	private void initViews() {
 		etInput = (EditText) findViewById(R.id.etInput);
 		btnSearch = (Button) findViewById(R.id.btnSearch);
 		btnSetting = (Button) findViewById(R.id.btnSetting);
 		gvResults = (GridView) findViewById(R.id.gvResults);
+		
 		gvResults.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -62,12 +64,46 @@ public class SearchActivity extends Activity {
 		imageResults = new ArrayList<ImageResult>();
 		aImageResults = new ImageResultsAdapter(this, imageResults);
 		gvResults.setAdapter(aImageResults);
+		gvResults.setOnScrollListener(new EndlessScrollListener() {
+			
+			@Override
+			public void onLoadMore(int page, int totalItemsCount) {
+				Log.i("INFO", "page:"+page);
+				Log.i("INFO", "totalItemsCount:"+totalItemsCount);
+				customLoadMoreDataFromApi(page, totalItemsCount); 
+			}
+
+			private void customLoadMoreDataFromApi(int page, int totalItemsCount) {
+				String keyword = etInput.getText().toString();
+				String requestUrl = getUrl(keyword);
+				totalItemsCount +=1;
+				requestUrl += "&start=" + totalItemsCount;
+				Log.i("INFO", "requestUrl:"+requestUrl);
+				AsyncHttpClient client = new AsyncHttpClient();
+				client.get(requestUrl, new JsonHttpResponseHandler(){
+					@Override
+					public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+						JSONArray result = null;
+						try {
+							result = response.getJSONObject("responseData").getJSONArray("results");
+//							imageResults.clear();
+							aImageResults.addAll(ImageResult.fromJASONArray(result));
+						} catch (JSONException e) {
+							e.printStackTrace();
+						}
+					}
+				});
+			}
+			
+			
+		});
 	}
 
 	public void onClickSearch(View v) {
 		String keyword = etInput.getText().toString();
 		Toast.makeText(this, URL+keyword, Toast.LENGTH_SHORT).show();
 		AsyncHttpClient client = new AsyncHttpClient();
+		
 		client.get(getUrl(keyword), new JsonHttpResponseHandler(){
 			@Override
 			public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
