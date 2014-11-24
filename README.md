@@ -1,6 +1,6 @@
 # Grid Image Search
 
-Time spent: 6 hours spent in total
+Time spent: 9 hours spent in total
 
 Completed user stories:
  * [x] User can enter a search query that will display a grid of image results from the Google Image API.
