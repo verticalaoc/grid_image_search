@@ -12,11 +12,16 @@ Completed user stories:
 
 
 Walkthrough of all user stories:
-Setting - change color filter
+- Setting - change color filter
+
 ![Video Walkthrough](gif1.gif)
-Infinite scrolling
+
+- Infinite scrolling
+
 ![Video Walkthrough](gif2.gif)
-Full image
+
+- Full image
+
 ![Video Walkthrough](gif3.gif)
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
